@@ -1,0 +1,270 @@
+body {
+    background-color: #e8e8e9;
+
+    font-family: 'Roboto', sans-serif !important;
+}
+
+
+.custom_padding{
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+.header_card{
+    height: 125px;
+    border-radius: 2px;
+    font-weight: 300;
+}
+
+.bg{
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    border-radius:4px;
+    height: 600px;
+    box-shadow: 1px 1px 1px -1px rgba(100,100,100,.5);
+}
+
+
+.shadow {
+    -webkit-filter: drop-shadow( 0px 2px 2px rgba(0,0,0,.3) );
+    filter: drop-shadow( 0px 2px 2px rgba(0,0,0,.3) );
+}
+
+.hr-custom {
+    border: 0;
+    height: 1px;
+    background-color: rgba(100, 100, 100, 0.2);
+    margin-bottom: 10px !important;
+    -background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(100, 100, 100, 0.5), rgba(0, 0, 0, 0));
+}
+
+.panel-header
+{
+    height:50px;
+    background-color: #f4f4f4;
+    border-radius: 2px 2px 0 0;
+    border-bottom: 1px solid #dbdbdb;
+    padding:10px 20px 10px 20px;
+}
+
+.title-header
+{
+    height:50px;
+    background-color: #f4f4f4;
+    border-radius: 2px 2px 0 0;
+    border-bottom: 1px solid #dbdbdb;
+    padding:10px 10px 5px 35px;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    font: 12px sans-serif;
+    border: 0px;
+    pointer-events: none;
+    line-height: 1;
+    font-weight: bold;
+    padding:5px 10px 5px 10px;
+    background: rgba(28, 48, 91, 0.9);
+    color: #fff;
+    border-radius: 3px;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
+}
+
+.grid line {
+    stroke-dasharray: 2 2 ;
+    stroke: lightgrey;
+    stroke-opacity: 0.5;
+    shape-rendering: crispEdges;
+}
+
+.grid path {
+    stroke-width: 0;
+}
+
+#exTab .tab-content {
+    color : white;
+    background-color: #e8e8e9;
+    -padding : 5px 5px;
+
+}
+
+
+/* remove border radius for the tab */
+
+#exTab .nav-pills > li > a {
+    border-radius: 4px 4px 0 0 ;
+}
+
+.row {
+    margin: 0; !important;
+}
+
+.heading-style{
+    color:#515154;
+    line-height:30px;
+    font-weight: 600;
+}
+
+@media all and (min-width: 1200px) {
+    .heading-style{
+        font-size: 1.2em;
+    }
+}
+
+@media all and (min-width: 992px) and (max-width: 1200px) {
+    .heading-style{
+        font-size: .8em;
+    }
+}
+
+@media all and (max-width: 992px) {
+    .heading-style{
+        font-size: 1em;
+    }
+}
+
+.pagination{
+    margin: 0 auto !important;
+
+}
+
+.box_blue {
+    font: 10px sans-serif;
+}
+
+.box_blue line{
+    fill: #8CBADB;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.box_blue rect{
+    fill: #8CBADB;
+    stroke: rgb(31, 119, 180);
+    stroke-width: 2px;
+}
+
+.box_blue circle {
+    fill: #8CBADB;
+    stroke: rgb(31, 119, 180);
+    stroke-width: 1px;
+}
+
+.box_blue .center {
+    stroke-dasharray: 3,3;
+    stroke: rgb(31, 119, 180);
+    stroke-width: 2px;
+}
+
+.box_blue .outlier {
+    fill: none;
+}
+
+
+.box_red {
+    font: 10px sans-serif;
+}
+
+.box_red line{
+    fill: #ED9293;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.box_red rect{
+    fill: #ED9293;
+    stroke: #a51c18;
+    stroke-width: 2px;
+}
+
+.box_red circle {
+    fill: #ED9293;
+    stroke: #a51c18;
+    stroke-width: 1px;
+}
+
+.box_red .center {
+    stroke-dasharray: 3,3;
+    stroke: #a51c18;
+    stroke-width: 2px;
+}
+
+.box_red .outlier {
+    fill: none;
+}
+
+
+.box {
+    font: 10px sans-serif;
+}
+
+.box line{
+    fill: #9edbc6;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.box rect{
+    fill: #9edbc6;
+    stroke: rgb(19, 153, 120);
+    stroke-width: 2px;
+}
+
+.box circle {
+    fill: #9edbc6;
+    stroke: rgb(19, 153, 120);
+    stroke-width: 1px;
+}
+
+.box .center {
+    stroke-dasharray: 3,3;
+    stroke: rgb(19, 153, 120);
+    stroke-width: 2px;
+}
+
+.box .outlier {
+    fill: none;
+}
+
+
+
+
+.box_m {
+    font: 10px sans-serif;
+}
+
+.box_m line{
+    fill: #b0a5ff;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.box_m rect{
+    fill: #b0a5ff;
+    stroke: #7A6FCA;
+    stroke-width: 2px;
+}
+
+.box_m circle {
+    fill: #b0a5ff;
+    stroke: #7A6FCA;
+    stroke-width: 1px;
+}
+
+.box_m .center {
+    stroke-dasharray: 3,3;
+    stroke: #7A6FCA;
+    stroke-width: 2px;
+}
+
+.box_m .outlier {
+    fill: none;
+}
