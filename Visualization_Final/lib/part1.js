@@ -7,7 +7,7 @@ function loadCompanyData() {
         return d;
     },function(error,data){
         out=data;
-        drawAppTrend(data);
+        //drawAppTrend(data);
     });
     
     d3.csv("data/soft.csv", function(d, i, columns) {

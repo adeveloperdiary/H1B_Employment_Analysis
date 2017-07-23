@@ -1,6 +1,23 @@
 /**
  * Created by abhisekjana on 7/13/17.
  */
+var state, us,city, remaining_map=3;
+
+function loadMapData() {
+    d3.csv("data/state_data.csv", function(error, data) {
+        state = data;
+        if (!--remaining_map) drawMap();
+    });
+    d3.json("data/us-states.json", function(error, data) {
+        us = data;
+        if (!--remaining_map) drawMap();
+    });
+    d3.csv("data/us_city.csv", function(error, data) {
+        city = data;
+        if (!--remaining_map) drawMap();
+    });
+}
+var g,projection;
 
 function drawMap(){
     
@@ -20,12 +37,13 @@ function drawMap(){
     
     var margin = {top: 20, right: 20, bottom: 50, left: 60},
         width = +svg.attr("width") - margin.left - margin.right,
-        height = +svg.attr("height") - margin.top - margin.bottom,
-        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        height = +svg.attr("height") - margin.top - margin.bottom;
+    
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     
     
     //Define map projection
-    var projection = d3.geoAlbersUsa()
+    projection = d3.geoAlbersUsa()
         .translate([width/2, height/2])
         .scale([1000]);
     
@@ -41,33 +59,32 @@ function drawMap(){
     //Colors taken from colorbrewer.js, included in the D3 download*/
     
     //Load in agriculture data
-    d3.csv("data/state_data.csv", function(data) {
         
         //Set input domain for color scale
         color.domain([
-            d3.min(data, function(d) { return d.value; }),
-            d3.max(data, function(d) { return d.value; })
+            d3.min(state, function(d) { return d.value; }),
+            d3.max(state, function(d) { return d.value; })
         ]);
         
         //Load in GeoJSON data
-        d3.json("data/us-states.json", function(json) {
+        
             
             //Merge the ag. data and GeoJSON
             //Loop through once for each ag. data value
-            for (var i = 0; i < data.length; i++) {
+            for (var i = 0; i < state.length; i++) {
                 
-                var dataState = data[i].state;				//Grab state name
-                var dataValue = parseFloat(data[i].value);	//Grab data value, and convert from string to float
+                var dataState = state[i].state;				//Grab state name
+                var dataValue = parseFloat(state[i].value);	//Grab data value, and convert from string to float
                 
                 //Find the corresponding state inside the GeoJSON
-                for (var j = 0; j < json.features.length; j++) {
+                for (var j = 0; j < us.features.length; j++) {
                     
-                    var jsonState = json.features[j].properties.name;
+                    var jsonState = us.features[j].properties.name;
                     
                     if (dataState == jsonState) {
                         
                         //Copy the data value into the JSON
-                        json.features[j].properties.value = dataValue;
+                        us.features[j].properties.value = dataValue;
                         
                         //Stop looking through the JSON
                         break;
@@ -78,7 +95,7 @@ function drawMap(){
             
             //Bind data and create one path per GeoJSON feature
             g.selectAll("path")
-                .data(json.features)
+                .data(us.features)
                 .enter()
                 .append("path")
                 .attr("d", path)
@@ -138,70 +155,17 @@ function drawMap(){
                         //If value is undefined…
                         return "#ccc";
                     }
-                })
-                
-                
-            ;
+                });
             
             //Load in cities data
-            d3.csv("data/us_city.csv", function(data) {
-                
-                var circle=g.selectAll("circle")
-                    .data(data)
-                    .enter()
-                    .append("circle");
-                    
-                circle.attr("cx", function(d) {
-                        return projection([d.lon, d.lat])[0];
-                    })
-                    .attr("cy", function(d) {
-                        return projection([d.lon, d.lat])[1];
-                    })
-                    .style("fill", "#ff1d34")
-                    .style("opacity", 0.3)
-                    .attr("r", 0)
-                    .on("mouseover", function(d,i) {
-                        
-                        $(this).attr("cursor","pointer");
+    drawCircle();
     
-                        div.transition()
-                            .duration(200)
-                            .style("opacity", .9);
-                        div.html("<span style='font-weight: 400;line-height: 14px'><span style='font-size: 13px;line-height: 20px'>"+ d.place +"</span><BR/><HR style='margin-top: 0;margin-bottom: 3px;border-top: dashed 1px;opacity: .5'/>Applications : "+accounting.formatNumber(d.application)+"</span>")
-                            .style("left", (d3.event.pageX+25) + "px")
-                            .style("top", (d3.event.pageY-25) + "px")
-                            .style("background",'#002134');
-                        
-                        
-                    })
-                    .on("mouseout", function(d,i) {
-                        $(this).attr("opacity",1);
-                        
-                        div.transition()
-                            .duration(500)
-                            .style("opacity", 0);
-                    })
-                    .transition()
-                    .ease(d3.easeQuad)
-                    .duration(1000)
-                    .attr("r", function(d) {
-                        return Math.sqrt(parseInt(d.application) * 0.01);
-                    });
-                    
-                
-            });
-            
-            
-        });
-        
-    });
-    
-    var i=10;
+    var i =10;
     var legend = g.selectAll(".legend")
         .data(color.ticks(100).slice(1))
         .enter().append("g")
         .attr("class", "legend")
-        .attr("transform", function(d, i) { return "translate(" + (150 + i * 3) + "," + (height+10) + ")"; });
+        .attr("transform", function(d, i) { return "translate(" + (150 + i * 3) + "," + (height+12) + ")"; });
     
     legend.append("rect")
         .attr("width", 20)
@@ -215,24 +179,91 @@ function drawMap(){
         .attr("transform", function(d, i) { return "translate(" + (150) + "," + (height+10) + ")"; });
     
     legendText.append("text")
-        .attr("x", width/2-50)
+        .attr("x", width/2)
         .attr("y", 35)
         .style("fill","black")
+        .style("font-size","12px")
         .text("260K");
     
     legendText.append("text")
         .attr("x", width/2-335)
         .attr("y", 35)
         .style("fill","black")
+        .style("font-size","12px")
         .text("1K");
     
     legendText.append("text")
-        .attr("x", width/2-190)
+        .attr("x", width/2-170)
         .attr("y", 35)
         .style("fill","black")
-        .text("60K")
-        
-        
+        .style("font-size","12px")
+        .text("60K");
     
+    legendText.append("text")
+        .attr("x", width/2-200)
+        .attr("y", -2)
+        .style("fill","black")
+        .style("font-size","12px")
+        .text("# of Applications");
     
+}
+
+
+function removeCircle(){
+    g.selectAll("circle").transition()
+        .ease(d3.easeQuad)
+        .duration(500)
+        .attr("r", function(d) {
+            return 0;
+        }).remove();
+    
+}
+
+function drawCircle(){
+    
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+    
+    var circle=g.selectAll("circle")
+        .data(city)
+        .enter()
+        .append("circle");
+    
+    circle.attr("cx", function(d) {
+            return projection([d.lon, d.lat])[0];
+        })
+        .attr("cy", function(d) {
+            return projection([d.lon, d.lat])[1];
+        })
+        .style("fill", "#ff1d34")
+        .style("opacity", 0.3)
+        .attr("r", 0)
+        .on("mouseover", function(d,i) {
+            
+            $(this).attr("cursor","pointer");
+            
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("<span style='font-weight: 400;line-height: 14px'><span style='font-size: 13px;line-height: 20px'>"+ d.place +"</span><BR/><HR style='margin-top: 0;margin-bottom: 3px;border-top: dashed 1px;opacity: .5'/>Applications : "+accounting.formatNumber(d.application)+"</span>")
+                .style("left", (d3.event.pageX+25) + "px")
+                .style("top", (d3.event.pageY-25) + "px")
+                .style("background",'#002134');
+            
+            
+        })
+        .on("mouseout", function(d,i) {
+            $(this).attr("opacity",1);
+            
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        })
+        .transition()
+        .ease(d3.easeQuad)
+        .duration(1000)
+        .attr("r", function(d) {
+            return Math.sqrt(parseInt(d.application) * 0.01);
+        });
 }

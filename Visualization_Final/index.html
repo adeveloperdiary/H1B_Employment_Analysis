@@ -36,7 +36,9 @@
     <div style="line-height: 75px;margin-left:20px;color:#6e6e74;font-size: 1.4em" class="pull-left">
         H1B Employment Analysis (2011 - 2016)
     </div>
-
+    <div class="pull-right" style="line-height: 75px;margin-right: 20px">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">About the Visualization</button>
+    </div>
 </div>
 
 <div id="exTab" class="container">
@@ -90,6 +92,42 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog" style="width: 900px">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">About the Visualization</h4>
+            </div>
+            <div class="modal-body">
+                <p><span style="font-family: helvetica, arial, sans-serif; font-size: 10pt;"><strong><span style="color: black;">An interactive slideshow</span></strong><span style="color: black;"> narrative visualization structure has been used in visualization for the H1B Employment Analysis</span>. <span style="color: black;">The left side panel has the 1-7 navigation control to navigate between the scenes. </span></span></p>
+                <p><span style="font-family: helvetica, arial, sans-serif; font-size: 10pt;"><strong><span style="color: black;">DATA: </span></strong></span></p>
+                <p><span style="font-size: 10pt; font-family: helvetica, arial, sans-serif; color: black;">The data is taken from following public domain:</span></p>
+                <p><span style="font-size: 10pt; font-family: helvetica, arial, sans-serif; color: black;"><a href="https://www.kaggle.com/nsharan/h-1b-visa/downloads/h-1b-visa.zip"><span style="color: black; text-decoration: none; text-underline: none;">https://www.kaggle.com/nsharan/h-1b-visa/downloads/h-1b-visa.zip</span></a></span></p>
+                <p><span style="font-size: 10pt; font-family: helvetica, arial, sans-serif; color: black;"><a href="https://www.kaggle.com/nsharan/h-1b-visa">https://www.kaggle.com/nsharan/h-1b-visa</a></span></p>
+                <p><span style="font-family: helvetica, arial, sans-serif; font-size: 10pt;"><strong><span style="color: black;">SCENES:</span></strong></span></p>
+                <p><span style="font-size: 10pt; font-family: helvetica, arial, sans-serif; color: black;">There are total 7 scenes in the interactive slideshow visualization. User can navigate between the scenes using the navigation control (1 &ndash; 7) located at the left-top header. The view and formatting is consistent across the scenes so that the user does not get dis-oriented by the graphics. The choice of colors and fonts are simple and minimalist to avoid distracting the viewer. The left panel provides more details including observations and additional visualization (scene 6 &amp; 7) and the right panel displays the main visualizations.<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span></p>
+                <p style="vertical-align: baseline;"><span style="font-family: helvetica, arial, sans-serif; font-size: 10pt;"><strong><span style="color: black; text-transform: uppercase;">ANNOTATIONS</span></strong></span></p>
+                <p style="vertical-align: baseline;"><span style="font-size: 10pt; font-family: helvetica, arial, sans-serif; color: black;">Tooltip has been enabled for all the visualizations. On mouse-over more details will be displayed using the tooltip. Some of the visualizations have annotation built into them (scene 6 &amp; 7). In scene 6 &amp; 7 the annotation has been displayed using line and text. The line color indicates the type of the company (Outsourcing vs Product Company)</span></p>
+                <p style="vertical-align: baseline;"><span style="font-family: helvetica, arial, sans-serif; font-size: 10pt;"><strong><span style="color: black; text-transform: uppercase;">PARAMETERS</span></strong></span></p>
+                <p style="vertical-align: baseline;"><span style="font-size: 10pt; font-family: helvetica, arial, sans-serif; color: black;">The navigation control at the top of the left panel will help the user to navigate through 7 scenes. There are additional parameters at scenes 1 to hide the city details and at scenes 5 to reset the y scale.</span></p>
+                <p style="vertical-align: baseline;"><span style="font-family: helvetica, arial, sans-serif; font-size: 10pt;"><strong><span style="color: black; text-transform: uppercase;">TRIGGERS</span></strong></span></p>
+                <p><span style="font-family: helvetica, arial, sans-serif; font-size: 10pt;"><span style="color: black;">At slide 6 &amp; 7 user can click on the individual box plot to visualize the &ldquo;Median Wage Yearly Trend</span>&rdquo; for the specific company (which will be displayed using another line chart at the left panel). The navigation controls also act as triggers.</span></p>
+                <p style="vertical-align: baseline;"><span style="font-family: helvetica, arial, sans-serif; font-size: 10pt;"><strong><span style="color: black; text-transform: uppercase;">Tools</span></strong></span></p>
+                <p style="vertical-align: baseline;"><span style="font-size: 10pt; font-family: helvetica, arial, sans-serif; color: black;">D3 has been used to display all the visualizations. Additionally Bootstrap and JQuery java-script library has been used for layout and controls.</span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
 <script type="text/babel" src="lib/app.jsx"></script>
 
 <script>
@@ -98,24 +136,33 @@ $( document ).ready(function() {
     loadBoxPlotData();
     loadJobData();
     loadWageData();
-    $("#left_summary").html(Handlebars.compile($("#page1").html()));
-
+    loadMapData();
+    $("#left_summary").html(Handlebars.compile($("#page7").html()));
+    $("#main_header").html("Geographical Distribution of H1B Applications (2011-2016)");
 
     $("#bottom_chart").hide();
+
+    $("#toggleChart1").click(function(){
+        if(document.getElementById('toggleChart1').checked) {
+            drawCircle();
+        } else {
+            console.log("hide");
+            removeCircle();
+        }
+    });
 
     $('#pagination').bootpag({
         total: 7
     }).on("page", function (event, num) {
-        console.log(num);
         switch (num){
-            case 1:
+            case 4:
                 $("#main_header").html("Top 5 H1B Applicants (2011-2016)");
                 $("#bottom_chart").hide();
                 drawAppTrend(out);
 
                 $("#left_summary").html(Handlebars.compile($("#page1").html()));
                 break;
-            case 2:
+            case 5:
                 $("#main_header").html("Top 5 H1B Applicants - Product Development Companies (2011-2016)");
 
                 $("#bottom_chart").hide();
@@ -135,7 +182,7 @@ $( document ).ready(function() {
 
 
                 break;
-            case 3:
+            case 6:
                 $("#left_summary").html(Handlebars.compile($("#page3").html()));
                 $("#main_header").html("Wage Distribution of 2016 H1B Applications - Outsourcing Companies");
                 $("#bottom_chart").show();
@@ -143,7 +190,7 @@ $( document ).ready(function() {
                 $('#bottom_header').html("Median Wage Yearly Trend (2011 - 2016)");
                 showMedianTrend(INFOSYS_MEDIAN,"INFOSYS","#004CD5");
                 break;
-            case 4:
+            case 7:
                 $("#left_summary").html(Handlebars.compile($("#page4").html()));
                 $("#main_header").html("Wage Distribution of 2016 H1B Applications - Product Companies");
                 $("#bottom_chart").show();
@@ -151,23 +198,33 @@ $( document ).ready(function() {
                 $('#bottom_header').html("Median Wage Yearly Trend (2011 - 2016)");
                 showMedianTrend(MICROSOFT_MEDIAN,"MICROSOFT","red");
                 break;
-            case 5:
+            case 2:
                 $("#left_summary").html(Handlebars.compile($("#page5").html()));
                 $("#main_header").html("Most Applied Job Titles (2011-2016)");
                 drawJobTitle();
                 $("#bottom_chart").hide();
                 break;
-            case 6:
+            case 3:
                 $("#left_summary").html(Handlebars.compile($("#page6").html()));
                 $("#main_header").html("Wage Distribution of the Most Applied Job Titles (2011-2016)");
                 drawWageBoxPlot();
                 $("#bottom_chart").hide();
                 break;
-            case 7:
+            case 1:
                 $("#left_summary").html(Handlebars.compile($("#page7").html()));
                 $("#main_header").html("Geographical Distribution of H1B Applications (2011-2016)");
                 drawMap();
                 $("#bottom_chart").hide();
+
+                $("#toggleChart1").click(function(){
+                    if(document.getElementById('toggleChart1').checked) {
+                        drawCircle();
+                    } else {
+                        console.log("hide");
+                        removeCircle();
+                    }
+                });
+
                 break;
         }
     });
@@ -183,19 +240,20 @@ $( document ).ready(function() {
                 of the H1B program among the <b>Product Development Companies</b>.
             </p>
             <p style="color:#666">
-                The Company Names are in x-axis and number of applications are in y-axis.
-                The colors of the column chart indicates different years.
-            </p>
-            <p style="color:#666">
                 The previous chart ( Top 5 H1B Applicants - Outsourcing Companies ) can
                 also be seen at the background. This provides a <b>visual comparison</b> of the
                 two charts.
             </p>
             <p style="color:#666">
-                <ul><li style="color:#666">We can see that the number of application filed by the Product Development Companies
-            are much lower than the Outsourcing Companies.</li></ul>
+            <ul><li style="color:#666">We can see that the number of application filed by the <b>Product Development</b> Companies
+                are much lower than the Outsourcing Companies.</li></ul>
 
             </p>
+            <p style="color:#666">
+                The Company Names are in x-axis and number of applications are in y-axis.
+                The colors of the column chart indicates different years.
+            </p>
+
             <p style="color:#666">
                 Please click on the checkbox below to reset the y-scale of the chart according
                 to the range of the Product Development Companies.
@@ -210,32 +268,25 @@ $( document ).ready(function() {
 
 <script id="page1" type="text/x-handlebars-template">
     <div>
-        <H4>H1B Employment Analysis:</H4>
-        <p style="color:#666">
-            We will be studying the H1B application data 2011 - 2016
-            provided by USCIS (United States Citizenship and Immigration Services).
-        </p>
-        <p style="color:#999;font-size:12px;">
-            "The US H-1B visa is a non-immigrant visa that allows US companies to
-            employ graduate level workers in specialty occupations that require
-            theoretical or technical expertise in specialized fields such as in
-            IT, finance, engineering, mathematics, science, medicine, etc." - Wikipedia
-        </p>
         <H4>Top 5 H1B Applicants are Outsourcing Companies:</H4>
         <p style="color:#666">
             The grouped column chart here shows that, the top 5 applicants of the H1B program
             from 2011 till 2016 are all Outsourcing Companies (Infosys, Tata Consultancy Services, Wipro, IBM, Accenture).
         </p>
         <p style="color:#666">
+        <ul style="color:#666">
+            <li>Looks like Infosys had filed maximum number of H1B applications.</li>
+            <li>Generally the number of applications increased till 2015 from 2011,
+                then there is a small dip in 2016.</li>
+        </ul>
+        </p>
+
+        <p style="color:#666">
             The Company Names are in x-axis and number of applications are in y-axis.
             The colors of the column chart indicates different years.
         </p>
         <p style="color:#666">
-            <ul style="color:#666">
-                <li>Looks like Infosys filed maximum number of H1B applications.</li>
-                <li>Generally the number of applications increased till 2015 from 2011,
-                    then there is a small dip in 2016.</li>
-            </ul>
+            On mouse-over the tooltip will display exact number of application filed for each year.
         </p>
 
     </div>
@@ -245,7 +296,7 @@ $( document ).ready(function() {
     <div>
         <H4 style="font-size:15px;">Wage Distribution - Outsourcing Companies:</H4>
         <p style="color:#666;font-size:12px">
-            The box plot shows the wage distribution of the outsourcing companies (Top 5 Applicants) for 2016
+            The box plot shows the wage distribution of the <b>outsourcing companies</b> (Also top 5 Applicants) for 2016
             applications. On hover the box plot will display the numeric data.
         </p>
         <p style="color:#666;font-size:12px">
@@ -254,7 +305,7 @@ $( document ).ready(function() {
         </p>
         <p style="color:#666;font-size:12px">
             Click on any of the box plot to view the yearly trend of median wage for any
-            specific outsourcing company from 2011 - 2016 below.
+            specific outsourcing company from 2011 - 2016 in the below line chart.
             By default the trend of median wage offered by Infosys has been displayed.
         </p>
     </div>
@@ -264,10 +315,8 @@ $( document ).ready(function() {
     <div>
         <H4 style="font-size:15px;">Wage Distribution - Product Companies:</H4>
         <p style="color:#666;font-size:12px">
-            The box plot shows the wage distribution of the product companies (Top 5 Applicants) for 2016
-            applications. On hover the box plot will display the numeric data.
-            The yearly trend of median wage for specific product company will be displayed
-            in below chart.
+            The box plot shows the wage distribution of the top 5 <b>product companies</b> for 2016
+            applications.
         </p>
         <p style="color:#666;font-size:12px">
             The median wage offered by the product companies in 2016 has been highlighted
@@ -277,6 +326,12 @@ $( document ).ready(function() {
             <ul><li style="color:#666;font-size:12px">The difference between the median wage offered
         by outsourcing vs product companies is around <b>$30,000</b>.</li></ul>
         </p>
+        <p style="color:#666;font-size:12px">
+            On hover the box plot will display the numeric data.
+            The yearly trend of median wage for specific product company will be displayed
+            in below line chart.
+        </p>
+
     </div>
 </script>
 
@@ -285,15 +340,15 @@ $( document ).ready(function() {
     <div>
         <H4>Most Applied Job Titles:</H4>
         <p style="color:#666;">
-            The bar plot shows the top 15 most applied job titles from 2011 - 2016.
+            The bar plot shows the top 15 most applied H1B job titles from 2011 - 2016.
         </p>
 
         <p style="color:#666;">
             <ul>
-                <li style="color:#666;">Interesting fact is most of the job
+                <li style="color:#666;">Most of the job
                     titles are related to IT/Software Industry
                 </li>
-                <li style="color:#666;">Programming Analyst is the highest applied job title.</li>
+                <li style="color:#666;">Programming Analyst is the most applied job title.</li>
             </ul>
         </p>
         <p style="color:#666;">
@@ -311,6 +366,12 @@ $( document ).ready(function() {
         </p>
 
         <p style="color:#666;">
+            The individual box plot has been ordered from
+            High to Low median wage.
+        </p>
+
+
+        <p style="color:#666;">
         <ul>
             <li style="color:#666;">
                 The Senior Software Engineer has the highest median wage ($92K).
@@ -320,8 +381,8 @@ $( document ).ready(function() {
                 the median wage is towards the lower side ($58K).</li>
             <li style="color:#666;">
                 The median salary of assistant professor is lowest (52K) among
-                the 15 most applied job titles, there are many outliers. This indicates
-                many assistant professor's wage is more then $100K</li>
+                the 15 most applied job titles, however there are many outliers. This indicates
+                many assistant professor's offered wage is more then $100K</li>
         </ul>
         </p>
         <p style="color:#666;">
@@ -333,29 +394,40 @@ $( document ).ready(function() {
 
 <script id="page7" type="text/x-handlebars-template">
     <div>
-        <H4>Geographical Distribution of H1B Applications:</H4>
-        <p style="color:#666;">
+        <H4 style="margin-top:5;margin-bottom:5px">H1B Employment Analysis:</H4>
+        <p style="color:#666;font-size:13px">
+            We will be studying the H1B application data from 2011 - 2016
+            provided by USCIS (United States Citizenship and Immigration Services).
+        </p>
+        <p style="color:#999;font-size:12px;">
+            "The US H-1B visa is a non-immigrant visa that allows US companies to
+            employ graduate level workers in specialty occupations that require
+            theoretical or technical expertise in specialized fields such as in
+            IT, finance, engineering, mathematics, science, medicine, etc." - Wikipedia
+        </p>
+        <H4>Geographical Distribution:</H4>
+        <p style="color:#666;font-size:13px">
             The map shows the geographical distribution of H1B applications (2011 - 2016) across USA.
-            By looking into the map we can location of most of the H1B employments.
+        <ul>
+            <li style="color:#666;font-size:13px">Top three states with largest H1B employments are <b>New York, Texas & California.</b></li>
+            <li style="color:#666;font-size:13px">We have used log scale to display the color.</li>
+            <li style="color:#666;font-size:13px">Most of the H1B jobs are concentrated to few specific cities/areas.</li>
+        </ul>
         </p>
 
-        <p style="color:#666;">
-            The color of each state is based on the number of applications The legend is shown below the map.
+        <p style="color:#666;font-size:13px">
+            The color of each state is based on the number of applications (The legend is shown below the map).
         </p>
 
-        <p style="color:#666;">
-            The red circle highlights 50 top city provided as location in H1B Applications. The size of the circle depends
+        <p style="color:#666;font-size:13px">
+            The red circles highlights <b>50</b> top city provided as employment location in H1B Applications. The size of the circles depends
             on the number of applications.
         </p>
-        <p style="color:#666;">
-            On hover, the number of applications for each State/City will be displayed in tooltip.
-        </p>
-        <p style="color:#666;">
-            <ul>
-                <li style="color:#666;">Three states - New York, Texas, California have largest H1B employments.</li>
-                <li style="color:#666;">We have used log scale to display the color.</li>
-                <li style="color:#666;">The H1B jobs are concentrated to few specific cities.</li>
-            </ul>
+        <p style="color:#666;font-size:13px">
+            Click on the checkbox below to hide the red circles, which showing details of the cities.
+
+            <label style="padding-left:220px;padding-top:-20px"><input type="checkbox" value="" id="toggleChart1" checked="checked"> Show Top Cities </label>
+
         </p>
 
 

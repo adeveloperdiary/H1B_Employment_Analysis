@@ -290,6 +290,20 @@ function drawBoxPlot(data,color,class_name,median,compare,compare_color) {
         annotation.append("text")
             .attr('class',"median_text_old")
             .attr("x", width-70)
+            .text("( Outsourcing")
+            .attr("y", y(compare)+25)
+            .attr("opacity",.8);
+        
+        annotation.append("text")
+            .attr('class',"median_text_old")
+            .attr("x", width-70)
+            .text("Company )")
+            .attr("y", y(compare)+40)
+            .attr("opacity",.8);
+        
+        annotation.append("text")
+            .attr('class',"median_text_old")
+            .attr("x", width-70)
             .text("Median Salary")
             .attr("y", y(compare)-5)
             .attr("opacity",.8);
@@ -297,6 +311,7 @@ function drawBoxPlot(data,color,class_name,median,compare,compare_color) {
         annotation.append("text")
             .attr('class',"median_text_old")
             .attr("x", width-45)
+            .style("font-weight",'bold')
             .text(accounting.formatMoney(compare,'$',0))
             .attr("y", y(compare)+13)
             .attr("opacity",.8);
@@ -337,6 +352,7 @@ function drawBoxPlot(data,color,class_name,median,compare,compare_color) {
         .attr('class',"median_text")
         .attr("x", width-45)
         .attr("y", y(11000))
+        .style("font-weight",'bold')
         .text(accounting.formatMoney(median,'$',0))
         .attr("opacity",0)
         .transition()
